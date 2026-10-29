@@ -1,0 +1,16 @@
+OpenFlights source data
+
+Files:
+- airports.dat
+- routes.dat
+
+Source:
+https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat
+https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat
+
+Downloaded:
+2026-10-27
+
+The raw files are excluded from version control by design. Re-download the
+same source files before reproducing the experiments and record any changed
+snapshot date in the final report.

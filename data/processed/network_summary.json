@@ -1,0 +1,26 @@
+{
+  "source": {
+    "airports_file": "data\\raw\\airports.dat",
+    "routes_file": "data\\raw\\routes.dat"
+  },
+  "full_graph": {
+    "nodes": 3214,
+    "edges": 18858,
+    "average_degree": 11.734909769757312,
+    "density": 0.0036523217459562126,
+    "connected_components": 7,
+    "largest_component_nodes": 3188,
+    "isolated_nodes": 0,
+    "average_clustering": 0.4917731731380378
+  },
+  "largest_connected_component": {
+    "nodes": 3188,
+    "edges": 18833,
+    "average_degree": 11.814930991217064,
+    "density": 0.0037072265425845824,
+    "connected_components": 1,
+    "largest_component_nodes": 3188,
+    "isolated_nodes": 0,
+    "average_clustering": 0.49283008525689675
+  }
+}
