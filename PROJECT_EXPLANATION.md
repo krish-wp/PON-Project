@@ -19,6 +19,53 @@ The project does **not** claim to predict a particular disease or make a real-wo
 - `data/processed/` contains the generated network summary and centrality rankings.
 - `results/` contains the generated CSV files and figures used for the analysis.
 
+## 1.2 Module-by-module breakdown of the code
+
+Each file in `src/epidemic_network/` has one clear job:
+
+| File | What it does |
+|------|-------------|
+| `config.py` | `ModelConfig` dataclass with all simulation parameters (beta, gamma, mobility rate, dt, duration, population, initial infected fraction) and validation. |
+| `network.py` | Parses OpenFlights `airports.dat`/`routes.dat`, cleans the graph (removes invalid IDs, self-loops, duplicates, isolates), extracts the largest connected component, and computes graph summaries. |
+| `centrality.py` | Computes degree, closeness, betweenness, and eigenvector centrality for every airport using NetworkX, and ranks nodes for closure selection. |
+| `closures.py` | Selects which airports to close for a given budget and strategy (random, degree, closeness, betweenness, eigenvector), and removes closed nodes from the graph. |
+| `sir.py` | Implements the mean-field SIR integrator and the network metapopulation SIR integrator with graph-diffusion mobility coupling and delayed intervention support. |
+| `metrics.py` | Computes epidemic metrics (final outbreak size, peak infected fraction, time to peak) and resilience metrics (LCC fraction, connected components, average degree). |
+| `synthetic.py` | Generates ER, BA, WS synthetic networks and degree-preserving randomized graphs for null-model comparisons. |
+| `experiments.py` | Runs the closure-budget sweep, delayed-intervention experiment, synthetic-network comparison, and degree-preserving null-model comparison. Aggregates results. |
+| `plotting.py` | Plots budget results (outbreak size + LCC vs budget) and mean-field threshold curves. |
+| `cli.py` | Command-line entry point with subcommands: smoke-test, synthetic-experiment, openflights-summary, openflights-experiment, delayed-experiment, synthetic-comparison, null-model-comparison, mean-field-plot, plot-results. |
+| `__init__.py` | Package exports. |
+
+## 1.3 Key numbers cheat sheet (for viva)
+
+| Quantity | Value |
+|----------|-------|
+| Full graph airports | 3,214 |
+| Full graph routes | 18,858 |
+| Connected components | 7 |
+| Largest component airports | 3,188 |
+| Largest component routes | 18,833 |
+| Average degree (LCC) | 11.81 |
+| Beta (infection rate) | 0.30 |
+| Gamma (recovery rate) | 0.10 |
+| R0 = beta/gamma | 3 (> 1, outbreak can grow) |
+| Mobility rate | 0.02 |
+| Time step dt | 0.1 |
+| Duration | 80 |
+| Initial infected fraction | 1% (one fixed high-degree seed, protected from closure) |
+| Random seed | 2026 |
+| Closure budgets tested | 1% to 20% |
+| Random trials per budget | 5 |
+| Containment criterion | final outbreak ≤ 5% |
+| Random closure final outbreak @20% | 61.63% |
+| Closeness final outbreak @20% | 1.80% |
+| Degree final outbreak @20% | 3.00% |
+| Degree reaches containment at | 18% |
+| Closeness reaches containment at | 20% |
+| Delayed intervention (immediate / 20 / 40) | 18.83% / 54.15% / 57.02% |
+| Degree-preserving null: real vs randomized LCC @10% degree removal | 29.3% / 61.5% |
+
 ---
 
 ## 2. Why did we choose this topic?
@@ -166,7 +213,7 @@ The mean-field threshold is:
 R0 = beta * S0 / gamma
 ```
 
-If R0 is above 1, infection can initially grow. If it is below 1, it tends to die out. In our starting situation, R0 is above 1, so an outbreak can grow. We plotted below-threshold, threshold, and above-threshold behaviour to validate this basic theory.
+If R0 is above 1, infection can initially grow. If it is below 1, it tends to die out. In our starting situation, R0 is above 1 (R0 = 3), so an outbreak can grow. We plotted below-threshold, threshold, and above-threshold behaviour to validate this basic theory.
 
 ### Network metapopulation model
 
@@ -192,9 +239,7 @@ Main parameters for the real-network closure sweep:
 - initial infected fraction = 1% at one airport,
 - random seed = 2026 for random closure selection.
 
-The compact synthetic and delayed-intervention commands use shorter runs and may use
-different time steps; those settings are described separately below. They must not
-be confused with the parameters of the main 1--20% sweep.
+The compact synthetic and delayed-intervention commands use shorter runs and may use different time steps; those settings are described separately below. They must not be confused with the parameters of the main 1--20% sweep.
 
 ---
 
@@ -335,6 +380,8 @@ If we had more time, we would:
 - optimize both epidemic reduction and connectivity/economic cost together,
 - report uncertainty intervals for every strategy.
 
+---
+
 ## 14. How to reproduce the project
 
 From the project root, install the package and development dependencies:
@@ -355,8 +402,7 @@ Run the fast smoke test without the raw OpenFlights files:
 python -m epidemic_network.cli smoke-test
 ```
 
-After placing `airports.dat` and `routes.dat` in `data/raw/`, generate the
-processed network information:
+After placing `airports.dat` and `routes.dat` in `data/raw/`, generate the processed network information:
 
 ```powershell
 python -m epidemic_network.cli openflights-summary
@@ -372,9 +418,7 @@ python -m epidemic_network.cli plot-results `
   --output results/openflights_closure_results_full.csv
 ```
 
-The commands use the default 1--20% budgets and fixed seed `2026`. Results
-should be regenerated rather than manually edited. The report values are
-rounded summaries of the generated CSV files.
+The commands use the default 1--20% budgets and fixed seed `2026`. Results should be regenerated rather than manually edited. The report values are rounded summaries of the generated CSV files.
 
 ---
 
