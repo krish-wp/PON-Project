@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airport-epidemic-network"
+version = "0.1.0"
+description = "Reproducible SIR simulations on the global air-transport network"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.7",
+    "networkx>=3.1",
+    "numpy>=1.24",
+    "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+airport-epidemic = "epidemic_network.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
