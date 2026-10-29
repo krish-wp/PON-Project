@@ -61,8 +61,8 @@ network summary and centrality rankings:
 Run the configurable real-network closure experiment and generate its plot:
 
 ```powershell
-& "C:\Users\Krish\AppData\Local\Programs\Python\Python311\python.exe" -m epidemic_network.cli openflights-experiment --output results\openflights_closure_results.csv
-& "C:\Users\Krish\AppData\Local\Programs\Python\Python311\python.exe" -m epidemic_network.cli plot-results --output results\openflights_closure_results.csv
+& "C:\Users\Krish\AppData\Local\Programs\Python\Python311\python.exe" -m epidemic_network.cli openflights-experiment --output results\openflights_closure_results_full.csv --duration 80 --dt 0.1 --random-trials 5
+& "C:\Users\Krish\AppData\Local\Programs\Python\Python311\python.exe" -m epidemic_network.cli plot-results --output results\openflights_closure_results_full.csv
 ```
 
 For development, reduce the runtime with `--duration`, `--dt`, and

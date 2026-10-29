@@ -13,12 +13,11 @@ The project does **not** claim to predict a particular disease or make a real-wo
 ## 1.1 What is included in the submission?
 
 - [`report/PON_v1_2.pdf`](report/PON_v1_2.pdf) is the compiled IEEE-style report.
-- `report/main_submission.tex` is the LaTeX source used for the submitted report.
+- `report/main_final.tex` is the LaTeX source used for the submitted report (builds `report/PON_v1_2.pdf`).
 - `src/epidemic_network/` contains the parser, graph construction, centrality calculations, SIR integrators, experiments, metrics, and plotting code.
+- `data/raw/` contains the OpenFlights `airports.dat`, `routes.dat`, and `SOURCE.txt` snapshot (downloaded 27 October 2026).
 - `data/processed/` contains the generated network summary and centrality rankings.
 - `results/` contains the generated CSV files and figures used for the analysis.
-
-The raw OpenFlights files are not included in the repository. They should be placed in `data/raw/` before rerunning the real-network commands.
 
 ---
 
@@ -46,7 +45,7 @@ We completed these steps:
 8. Ran additional checks: epidemic threshold, synthetic networks, a degree-preserving null model, and delayed intervention.
 9. Wrote the results in an IEEE two-column report and checked the compiled PDF page count.
 
-The main closure experiment is reproducible from the recorded defaults: seed `2026`, budgets `0.01` through `0.20`, five random trials, duration `80`, and time step `0.05`.
+The main closure experiment is reproducible from the recorded defaults: seed `2026`, budgets `0.01` through `0.20`, five random trials, duration `80`, and time step `0.1`.
 
 ---
 
@@ -187,7 +186,7 @@ Main parameters for the real-network closure sweep:
 - beta = 0.30,
 - gamma = 0.10,
 - mobility rate = 0.02,
-- time step `dt` = 0.05,
+- time step `dt` = 0.1,
 - total duration = 80,
 - normalized population = 1 per airport,
 - initial infected fraction = 1% at one airport,
@@ -368,7 +367,7 @@ Run the full main sweep and plot:
 ```powershell
 python -m epidemic_network.cli openflights-experiment `
   --output results/openflights_closure_results_full.csv `
-  --duration 80 --dt 0.05 --random-trials 5
+  --duration 80 --dt 0.1 --random-trials 5
 python -m epidemic_network.cli plot-results `
   --output results/openflights_closure_results_full.csv
 ```
@@ -379,7 +378,7 @@ rounded summaries of the generated CSV files.
 
 ---
 
-## 14. Short answers for common viva questions
+## 15. Short answers for common viva questions
 
 ### Why did you use random closure?
 
@@ -411,6 +410,6 @@ With a limited closure budget, targeted centrality-based airport closure is much
 
 ---
 
-## 15. Final 30-second answer to end a viva
+## 16. Final 30-second answer to end a viva
 
 Our project used a real global airport network and an SIR-based metapopulation model to compare airport-closure strategies under limited budgets. We found that targeted closures based on network centrality are far more effective than random closure. Degree achieved the 5% containment criterion first at 18%, while closeness achieved the smallest final outbreak at 20%. The key lesson is that network structure matters, but intervention effectiveness must be balanced against the loss of transport connectivity.
