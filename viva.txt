@@ -1,0 +1,83 @@
+Yes—you can understand enough for a good viva in one day. But don’t try to memorize the whole code. Learn the story, the choices, and the results.
+
+Your project in one sentence:
+
+> We model epidemic spread across the OpenFlights airport network and compare which airport-closure strategy controls the outbreak best under limited closure budgets.
+
+Memorize this flow:
+
+1. Data/network  
+   - OpenFlights dataset.
+   - Airports = nodes; flight routes = undirected edges.
+   - Largest connected component: 3,188 airports and 18,833 routes.
+
+2. Main question  
+   - If only 1–20% of airports can be closed, which airports should be chosen to reduce an epidemic most effectively?
+
+3. Strategies compared  
+   - Random closure: baseline.
+   - Degree: airports with the most direct connections.
+   - Closeness: airports that are, on average, nearest to all others.
+   - Betweenness: airports that lie on many shortest paths.
+   - Eigenvector: airports connected to other influential airports.
+
+4. Epidemic model  
+   - SIR: Susceptible → Infected → Recovered.
+   - Infection rate: \(\beta=0.30\); recovery rate: \(\gamma=0.10\).
+   - Mean-field threshold: \(R_0=\beta/\gamma\), so here \(R_0=3>1\): an outbreak can grow.
+   - The network model also allows infection/population movement along routes.
+
+5. Fair comparison  
+   - Every strategy starts from the same high-degree infected airport.
+   - That airport is protected from closure; otherwise a strategy could “win” just by removing the initial infection source.
+
+6. Metrics  
+   - Final outbreak size.
+   - Peak infected fraction.
+   - Time to peak.
+   - Largest connected-component fraction: how fragmented the remaining network becomes.
+
+7. Core result  
+   - At 20% closure: closeness was best for final outbreak (1.80%), then degree (3.00%).
+   - Degree reached the 5% containment target first, at 18%.
+   - Random closure was ineffective: about 61.63% final outbreak at 20%.
+   - Targeted closure works, but can strongly fragment connectivity.
+
+8. Supporting result  
+   - Delaying intervention makes outcomes much worse.
+   - Network details matter beyond just the degree distribution, shown by the degree-preserving randomized-network comparison.
+
+9. Limitations  
+   - Routes are unweighted.
+   - No passenger-volume or real population data.
+   - Parameters are scenario values, not estimates for a specific disease.
+   - No rerouting/adaptive behavior after closures.
+
+Likely viva questions and short answers:
+
+- “Why use an undirected network?”  
+  “It is a simplifying assumption to study structural connectivity. Real flights are directed and weighted, which is a limitation and a natural extension.”
+
+- “Why does closeness perform well?”  
+  “It identifies airports with short average paths to the rest of the network, so closing them can reduce efficient global spread.”
+
+- “Why is betweenness not best, despite fragmenting the network?”  
+  “Being a bridge for shortest paths is not identical to being most important for this epidemic model. Fragmentation and outbreak suppression are related but different objectives.”
+
+- “Why compare against random closure?”  
+  “It gives a fair baseline to show whether centrality-based targeting provides real benefit beyond removing the same number of airports arbitrarily.”
+
+- “Why run five random trials?”  
+  “Random closure varies by chance; repeating it makes the comparison less dependent on one lucky or unlucky sample.”
+
+- “What is your main conclusion?”  
+  “With limited intervention budgets, targeted centrality-based closure greatly outperforms random closure, but the best strategy depends on whether epidemic control or preserving connectivity is the priority.”
+
+Minimal one-day plan:
+
+- Read the report once: 30 minutes.
+- Memorize the nine points above: 30 minutes.
+- Say the project explanation aloud three times without reading: 30 minutes.
+- Ask me to conduct a mock viva; I can question you one-by-one and correct your answers.
+
+You do not need to become an expert in every line of code. You need to confidently explain the research question, methodology, results, limitations, and your decisions.
